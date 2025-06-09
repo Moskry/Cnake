@@ -3,7 +3,7 @@
 
 void InitMap(SharedContent* Content)
 {
-    Content->Map = (char**)malloc(Content->Height * sizeof(char));
+    Content->Map = (char**)malloc(Content->Height * sizeof(char*));
     if (Content->Map)
     {
         for(int i = 0; i < Content->Height; i++)

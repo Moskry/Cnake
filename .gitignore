@@ -12,8 +12,9 @@ _deps
 CMakeUserPresets.json
 
 # Ignoring build folder
-
 build/
+# Ignoring vscode related files
+.vscode/
 
 # CLion
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can

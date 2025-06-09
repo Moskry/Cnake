@@ -9,9 +9,12 @@ void InitSnake(SharedContent* content)
     content->pos->x = content->Width;
     content->pos->y = content->Height / 2;
     content->Map[content->pos->y][content->pos->x] = '@';
+    
+    printf("\033[2J\033[H");
     for(int i = 0; i < content->Height; i++)
     {
         printf("%s\n",content->Map[i]);
+        fflush(stdout);
     }
 }
 
@@ -24,24 +27,46 @@ void SnakeMoveV(SharedContent* content, IntTuple newPos);
 void SnakeMoveH(SharedContent* content, IntTuple newPos);
 void Overwrite(IntTuple pos, IntTuple endl, char z);
 
-void SnakeMove(SharedContent* content, bool* GameOver)
+void DirectionSelection(SharedContent* content, bool* GameOver)
 {
     char bufferKey;
-    do
+    while(*GameOver != true)
     {
-        bufferKey = _getch();
-        bufferKey = toupper(bufferKey);
-    } while(bufferKey != 'A' &&
-        bufferKey != 'W' &&
-        bufferKey != 'S' &&
-        bufferKey != 'D');
 
-    switch (bufferKey)
+        do
+        {
+            bufferKey = _getch();
+            bufferKey = toupper(bufferKey);
+        } while(bufferKey != 'A' &&
+            bufferKey != 'W' &&
+            bufferKey != 'S' &&
+            bufferKey != 'D');
+
+        WaitForSingleObject(content->mutex, INFINITE);
+        content->direction = bufferKey;
+        ReleaseMutex(content->mutex);
+    }
+}
+
+void SnakeMove(SharedContent* content, bool* GameOver)
+{
+    DWORD clock = 500;
+    bool end;
+    while(*GameOver != true)
     {
-        case 'A': *GameOver = SnakeMoveLeft(content); break;
-        case 'W': *GameOver = SnakeMoveUp(content); break;
-        case 'S': *GameOver = SnakeMoveDown(content); break;
-        case 'D': *GameOver = SnakeMoveRight(content); break;
+        switch (content->direction)
+        {
+            case 'A': end = SnakeMoveLeft(content); break;
+            case 'W': end = SnakeMoveUp(content); break;
+            case 'S': end = SnakeMoveDown(content); break;
+            case 'D': end = SnakeMoveRight(content); break;
+        }
+        WaitForSingleObject(content->mutex, INFINITE);
+        *GameOver = end;
+        ReleaseMutex(content->mutex);
+
+        Sleep(clock);
+        if (clock > 50) clock -= 5;
     }
 }
 
@@ -87,24 +112,32 @@ bool SnakeMoveLeft(SharedContent* content)
 
 void SnakeMoveV(SharedContent* content, IntTuple newPos)
 {
+    WaitForSingleObject(content->mutex, INFINITE);
     content->Map[newPos.y][newPos.x] = '@';
     content->Map[content->pos->y][content->pos->x] = '.';
-    
+    ReleaseMutex(content->mutex);
+
     Overwrite(*(content->pos), (IntTuple){content->Width * 2, content->Height}, '.');
     Overwrite(newPos, (IntTuple){content->Width * 2, content->Height}, '@');
 
+    WaitForSingleObject(content->mutex, INFINITE);
     content->pos->y = newPos.y;
+    ReleaseMutex(content->mutex);
 }
 
 void SnakeMoveH(SharedContent* content, IntTuple newPos)
 {
+    WaitForSingleObject(content->mutex, INFINITE);
     content->Map[newPos.y][newPos.x] = '@';
     content->Map[content->pos->y][content->pos->x] = '.';
-    
+    ReleaseMutex(content->mutex);
+
     Overwrite(*(content->pos),(IntTuple){content->Width * 2, content->Height}, '.');
     Overwrite(newPos, (IntTuple){content->Width * 2, content->Height}, '@');
     
+    WaitForSingleObject(content->mutex, INFINITE);
     content->pos->x = newPos.x;
+    ReleaseMutex(content->mutex);
 }
 
 void Overwrite(IntTuple pos, IntTuple endl, char z)

@@ -14,4 +14,5 @@ typedef struct {
 } KeyStates;
 
 void InitSnake(SharedContent* content);
-void SnakeMove(SharedContent* content, bool* GameOver);
+void WINAPI SnakeMove(SharedContent* content, bool* GameOver);
+void WINAPI DirectionSelection(SharedContent* content, bool* GameOver);

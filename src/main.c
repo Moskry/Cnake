@@ -3,6 +3,7 @@
 #include <windows.h>
 #include "Shared.h"
 #include "Snake.h"
+#include "Threads.h"
 
 void enableAnsiEscCodes()
 {
@@ -16,11 +17,28 @@ int main()
 {
     enableAnsiEscCodes();
     IntTuple pos;
-    SharedContent Shared = {20,20,'u',&pos};
-    InitSnake(&Shared);
+    SharedContent Shared = {20,20,'W',&pos};
     bool GameOver = false;
-    while(GameOver != true)
-        SnakeMove(&Shared, &GameOver);
+    Shared.mutex = CreateMutex(NULL, false, NULL);
+
+    if (Shared.mutex == NULL) 
+    {
+    printf("Mutex creation failed: %d\n", GetLastError());
+    return 1;
+    }
+    DataS data = {&Shared,&GameOver};
+    InitSnake(&Shared);
+    DWORD threadMID;
+    DWORD threadSDID;
+
+    HANDLE hMovement = NewThread(&threadMID, MovementThread, &data);
+    HANDLE hDirection = NewThread(&threadSDID, DirectionThread, &data);
+
+     WaitForSingleObject(hMovement, INFINITE);
+     WaitForSingleObject(hDirection, INFINITE);
+
+    CloseHandle(hMovement);
+    CloseHandle(hDirection);
     FreeMap(&Shared);
     //Queue* Tail = InitQueue();
     //FreeQueue(&Tail);

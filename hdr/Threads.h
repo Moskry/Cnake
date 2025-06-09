@@ -2,8 +2,12 @@
 #include "Snake.h"
 #include "Shared.h"
 
-typedef DWORD(WINAPI* TFunc)(LPVOID);
+typedef struct DataS
+{
+    SharedContent* content;
+    bool* GameOver;
+} DataS;
 
-DWORD WINAPI MovementThread(LPVOID lParam);
-DWORD WINAPI DirectionThread(LPVOID lParam);
-HANDLE NewThread(int threadId, TFunc func);
+DWORD WINAPI MovementThread(LPVOID pData);
+DWORD WINAPI DirectionThread(LPVOID pData);
+HANDLE NewThread(DWORD* threadID, LPTHREAD_START_ROUTINE func, LPVOID pData);

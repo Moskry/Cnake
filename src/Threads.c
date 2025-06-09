@@ -1,26 +1,31 @@
 #include <windows.h>
 #include "Threads.h"
 
-DWORD WINAPI MovementThread(LPVOID lParam)
+DWORD WINAPI MovementThread(LPVOID pData)
 {
-    
+    DataS* data = (DataS*)pData;
+    SnakeMove(data->content, data->GameOver);
+    //Sleep(10000);
 }
 
-DWORD WINAPI DirectionThread(LPVOID lParam)
+DWORD WINAPI DirectionThread(LPVOID pData)
 {
-
+    DataS* data = (DataS*)pData;
+    DirectionSelection(data->content, data->GameOver);
+    //Sleep(10000);
 }
 
-HANDLE NewThread(int threadId, TFunc func)
+
+HANDLE NewThread(DWORD* threadID, LPTHREAD_START_ROUTINE func, LPVOID pData)
 {
     HANDLE hThread;
     hThread = CreateThread(
         NULL,               // Security
         0,                  // Stack size
-        func,               // Executing function
-        &threadId,          // Passing parameter
+        func,               // func address
+        pData,              // Passing parameter
         0,                  // Creation flags
-        NULL                // Thread ID
+        threadID                // Thread ID
     );
 
     return hThread;

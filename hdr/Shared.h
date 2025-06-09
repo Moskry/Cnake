@@ -1,5 +1,5 @@
 #pragma once
-
+#include <windows.h>
 #include "Snake.h"
 
 // Forward declarations
@@ -14,6 +14,7 @@ typedef struct SharedContent
     char direction;
     IntTuple* pos;
     char** Map;
+    HANDLE mutex;
 } SharedContent;
 
 typedef struct Queue

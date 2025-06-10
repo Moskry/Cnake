@@ -3,8 +3,6 @@
 #include "Apples.h"
 #include "Shared.h"
 
-short countDigits(int num);
-
 void InitiateApples(SharedContent* shared)
 {
     int counter = sqrt(shared->Height * shared->Width)/2;
@@ -40,16 +38,4 @@ void RandomNewApple(SharedContent* shared, int* h, int* w)
     shared->Map[*h][*w * 2] = '+';
     Overwrite((IntTuple){*w * 2, *h}, (IntTuple){shared->Width, shared->Height}, '+');
     ReleaseMutex(shared->mutex);
-}
-
-short countDigits(int num)
-{
-    short counter = 1;
-    num /= 10;
-    while(num > 0)
-    {
-        counter++;
-        num /= 10;
-    }
-    return counter;
 }

@@ -2,14 +2,18 @@
 #include <conio.h>
 #include <ctype.h>
 #include "Snake.h"
+#include "Apples.h"
 
 void InitSnake(SharedContent* content)
 {
     InitMap(content);
+
     content->pos->x = content->Width;
     content->pos->y = content->Height / 2;
     content->Map[content->pos->y][content->pos->x] = '@';
     
+    InitiateApples(content);
+
     printf("\033[2J\033[H");
     for(int i = 0; i < content->Height; i++)
     {
@@ -25,7 +29,6 @@ bool SnakeMoveUp(SharedContent* content);
 
 void SnakeMoveV(SharedContent* content, IntTuple newPos);
 void SnakeMoveH(SharedContent* content, IntTuple newPos);
-void Overwrite(IntTuple pos, IntTuple endl, char z);
 
 void DirectionSelection(SharedContent* content, bool* GameOver)
 {
@@ -112,10 +115,15 @@ bool SnakeMoveLeft(SharedContent* content)
 
 void SnakeMoveV(SharedContent* content, IntTuple newPos)
 {
+    bool IsApple = false;
+    if (content->Map[newPos.y][newPos.x] == '+') IsApple = true;
+
     WaitForSingleObject(content->mutex, INFINITE);
     content->Map[newPos.y][newPos.x] = '@';
     content->Map[content->pos->y][content->pos->x] = '.';
     ReleaseMutex(content->mutex);
+
+    if (IsApple) RandomNewApple(content, NULL, NULL);
 
     Overwrite(*(content->pos), (IntTuple){content->Width * 2, content->Height}, '.');
     Overwrite(newPos, (IntTuple){content->Width * 2, content->Height}, '@');
@@ -127,10 +135,15 @@ void SnakeMoveV(SharedContent* content, IntTuple newPos)
 
 void SnakeMoveH(SharedContent* content, IntTuple newPos)
 {
+    bool IsApple = false;
+    if (content->Map[newPos.y][newPos.x] == '+') IsApple = true;
+
     WaitForSingleObject(content->mutex, INFINITE);
     content->Map[newPos.y][newPos.x] = '@';
     content->Map[content->pos->y][content->pos->x] = '.';
     ReleaseMutex(content->mutex);
+
+    if (IsApple) RandomNewApple(content, NULL, NULL);
 
     Overwrite(*(content->pos),(IntTuple){content->Width * 2, content->Height}, '.');
     Overwrite(newPos, (IntTuple){content->Width * 2, content->Height}, '@');

@@ -1,6 +1,7 @@
 #pragma once
 #include <windows.h>
 #include "Snake.h"
+#include "Apples.h"
 
 // Forward declarations
 typedef struct Queue Queue;

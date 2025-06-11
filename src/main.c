@@ -24,15 +24,16 @@ int main()
 
     if (Shared.mutex == NULL) 
     {
-    printf("Mutex creation failed: %d\n", GetLastError());
-    return 1;
+        printf("Mutex creation failed: %d\n", GetLastError());
+        return 1;
     }
     DataS data = {&Shared,&GameOver};
+    FullData fdata = {&Shared, &GameOver, &Tail};
     InitSnake(&Shared);
     DWORD threadMID;
     DWORD threadSDID;
 
-    HANDLE hMovement = NewThread(&threadMID, MovementThread, &data);
+    HANDLE hMovement = NewThread(&threadMID, MovementThread, &fdata);
     HANDLE hDirection = NewThread(&threadSDID, DirectionThread, &data);
 
      WaitForSingleObject(hMovement, INFINITE);

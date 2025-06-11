@@ -51,7 +51,7 @@ void DirectionSelection(SharedContent* content, bool* GameOver)
     }
 }
 
-void SnakeMove(SharedContent* content, bool* GameOver)
+void SnakeMove(SharedContent* content, bool* GameOver, Queue** Tail)
 {
     DWORD clock = 500;
     bool end;

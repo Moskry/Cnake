@@ -3,8 +3,8 @@
 
 DWORD WINAPI MovementThread(LPVOID pData)
 {
-    DataS* data = (DataS*)pData;
-    SnakeMove(data->content, data->GameOver);
+    FullData* data = (FullData*)pData;
+    SnakeMove(data->content, data->GameOver, data->Tail);
     //Sleep(10000);
 }
 

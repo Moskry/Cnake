@@ -18,6 +18,7 @@ int main()
     enableAnsiEscCodes();
     IntTuple pos;
     SharedContent Shared = {20,20,'W',&pos};
+    Queue* Tail = InitQueue();
     bool GameOver = false;
     Shared.mutex = CreateMutex(NULL, false, NULL);
 

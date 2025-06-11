@@ -36,9 +36,10 @@ void EnqueueF(int X, int Y, QueueBase** Latest)
 {
     *Latest = EnqueueBase(X, Y, Latest);
 }
-void DequeueF(QueueBase** Eldest)
+IntTuple DequeueF(QueueBase** Eldest)
 {
-    DequeueBase(Eldest);
+    IntTuple RV = DequeueBase(Eldest);
+    return RV;
 }
 Queue* InitQueue()
 {

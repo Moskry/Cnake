@@ -2,6 +2,7 @@
 #include <windows.h>
 #include "Snake.h"
 #include "Apples.h"
+#include "Tail.h"
 
 // Forward declarations
 typedef struct Queue Queue;
@@ -23,7 +24,7 @@ typedef struct Queue
     QueueBase* Latest;
     QueueBase* Eldest;
     void (*Enqueue)(int, int, QueueBase**);
-    void (*Dequeue)(QueueBase**);
+    IntTuple (*Dequeue)(QueueBase**);
 } Queue;
 
 typedef struct QueueBase
@@ -44,7 +45,7 @@ QueueBase* EnqueueBase(int X, int Y, QueueBase** current);
 IntTuple DequeueBase(QueueBase** a);
 
 void EnqueueF(int X, int Y, QueueBase** Latest);
-void DequeueF(QueueBase** Eldest);
+IntTuple DequeueF(QueueBase** Eldest);
 
 Queue* InitQueue();
 void FreeQueue(Queue** Container);

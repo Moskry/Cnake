@@ -22,13 +22,13 @@ void InitSnake(SharedContent* content)
     }
 }
 
-bool SnakeMoveLeft(SharedContent* content);
-bool SnakeMoveRight(SharedContent* content);
-bool SnakeMoveDown(SharedContent* content);
-bool SnakeMoveUp(SharedContent* content);
+bool SnakeMoveLeft(SharedContent* content, Queue** Tail);
+bool SnakeMoveRight(SharedContent* content, Queue** Tail);
+bool SnakeMoveDown(SharedContent* content, Queue** Tail);
+bool SnakeMoveUp(SharedContent* content, Queue** Tail);
 
-void SnakeMoveV(SharedContent* content, IntTuple newPos);
-void SnakeMoveH(SharedContent* content, IntTuple newPos);
+void SnakeMoveV(SharedContent* content, IntTuple newPos, Queue** Tail);
+void SnakeMoveH(SharedContent* content, IntTuple newPos, Queue** Tail);
 
 void DirectionSelection(SharedContent* content, bool* GameOver)
 {
@@ -59,10 +59,10 @@ void SnakeMove(SharedContent* content, bool* GameOver, Queue** Tail)
     {
         switch (content->direction)
         {
-            case 'A': end = SnakeMoveLeft(content); break;
-            case 'W': end = SnakeMoveUp(content); break;
-            case 'S': end = SnakeMoveDown(content); break;
-            case 'D': end = SnakeMoveRight(content); break;
+            case 'A': end = SnakeMoveLeft(content, Tail); break;
+            case 'W': end = SnakeMoveUp(content, Tail); break;
+            case 'S': end = SnakeMoveDown(content, Tail); break;
+            case 'D': end = SnakeMoveRight(content, Tail); break;
         }
         WaitForSingleObject(content->mutex, INFINITE);
         *GameOver = end;
@@ -73,81 +73,105 @@ void SnakeMove(SharedContent* content, bool* GameOver, Queue** Tail)
     }
 }
 
-bool SnakeMoveUp(SharedContent* content)
+bool SnakeMoveUp(SharedContent* content, Queue** Tail)
 {
     if (content->pos->y == 0) return true;
     
     IntTuple newPos = {content->pos->x, content->pos->y - 1};
 
-    SnakeMoveV(content, newPos);
+    SnakeMoveV(content, newPos, Tail);
     return false;
 }
 
-bool SnakeMoveDown(SharedContent* content)
+bool SnakeMoveDown(SharedContent* content, Queue** Tail)
 {
     if (content->pos->y == content->Height - 1) return true;
     
     IntTuple newPos = {content->pos->x, content->pos->y + 1};
     
-    SnakeMoveV(content, newPos);
+    SnakeMoveV(content, newPos, Tail);
     return false;
 }
 
-bool SnakeMoveRight(SharedContent* content)
+bool SnakeMoveRight(SharedContent* content, Queue** Tail)
 {
     if (content->pos->x == content->Width * 2 - 2) return true;
 
     IntTuple newPos = {content->pos->x + 2, content->pos->y};
 
-    SnakeMoveH(content, newPos);
+    SnakeMoveH(content, newPos, Tail);
     return false;
 }
 
-bool SnakeMoveLeft(SharedContent* content)
+bool SnakeMoveLeft(SharedContent* content, Queue** Tail)
 {
     if (content->pos->x == 0) return true;
 
     IntTuple newPos = {content->pos->x - 2, content->pos->y};
 
-    SnakeMoveH(content, newPos);
+    SnakeMoveH(content, newPos, Tail);
     return false;
 }
 
-void SnakeMoveV(SharedContent* content, IntTuple newPos)
+void SnakeMoveV(SharedContent* content, IntTuple newPos, Queue** Tail)
 {
     bool IsApple = false;
-    if (content->Map[newPos.y][newPos.x] == '+') IsApple = true;
+    bool HasTail = false;
+    
+    if (content->Map[newPos.y][newPos.x] == '+')
+    {
+        IsApple = true;
+        AddTailSegment(content, Tail);
+    }
+
+    if ((*Tail)->Eldest) HasTail = true;
 
     WaitForSingleObject(content->mutex, INFINITE);
     content->Map[newPos.y][newPos.x] = '@';
-    content->Map[content->pos->y][content->pos->x] = '.';
+    if (!HasTail) content->Map[content->pos->y][content->pos->x] = '.';
+    else content->Map[content->pos->y][content->pos->x] = 'O';
     ReleaseMutex(content->mutex);
 
     if (IsApple) RandomNewApple(content, NULL, NULL);
 
-    Overwrite(*(content->pos), (IntTuple){content->Width * 2, content->Height}, '.');
+    if (!HasTail) Overwrite(*(content->pos), (IntTuple){content->Width * 2, content->Height}, '.');
+    else Overwrite(*(content->pos), (IntTuple){content->Width * 2, content->Height}, 'O');
     Overwrite(newPos, (IntTuple){content->Width * 2, content->Height}, '@');
+
+    if (!IsApple) RotateTail(content, Tail); 
 
     WaitForSingleObject(content->mutex, INFINITE);
     content->pos->y = newPos.y;
     ReleaseMutex(content->mutex);
 }
 
-void SnakeMoveH(SharedContent* content, IntTuple newPos)
+void SnakeMoveH(SharedContent* content, IntTuple newPos, Queue** Tail)
 {
     bool IsApple = false;
-    if (content->Map[newPos.y][newPos.x] == '+') IsApple = true;
+    bool HasTail = false;
+    
+    if (content->Map[newPos.y][newPos.x] == '+')
+    {
+        IsApple = true;
+        AddTailSegment(content, Tail);
+    }
+
+    if ((*Tail)->Eldest) HasTail = true;
 
     WaitForSingleObject(content->mutex, INFINITE);
     content->Map[newPos.y][newPos.x] = '@';
-    content->Map[content->pos->y][content->pos->x] = '.';
+    if (!HasTail) content->Map[content->pos->y][content->pos->x] = '.';
+    else content->Map[content->pos->y][content->pos->x] = 'O';
     ReleaseMutex(content->mutex);
 
     if (IsApple) RandomNewApple(content, NULL, NULL);
 
-    Overwrite(*(content->pos),(IntTuple){content->Width * 2, content->Height}, '.');
+    if (!HasTail) Overwrite(*(content->pos),(IntTuple){content->Width * 2, content->Height}, '.');
+    else Overwrite(*(content->pos),(IntTuple){content->Width * 2, content->Height}, 'O');
     Overwrite(newPos, (IntTuple){content->Width * 2, content->Height}, '@');
     
+    if (!IsApple) RotateTail(content, Tail);
+
     WaitForSingleObject(content->mutex, INFINITE);
     content->pos->x = newPos.x;
     ReleaseMutex(content->mutex);

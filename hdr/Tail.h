@@ -5,5 +5,5 @@
 typedef struct Queue Queue;
 typedef struct IntTuple IntTuple;
 
-void RotateTail(SharedContent* content, IntTuple* position, Queue** Tail);
+void RotateTail(SharedContent* content, Queue** Tail);
 void AddTailSegment(SharedContent* content, Queue** Tail);

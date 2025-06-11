@@ -42,6 +42,7 @@ int main()
     CloseHandle(hMovement);
     CloseHandle(hDirection);
     FreeMap(&Shared);
+    printf("Game over!");
     //Queue* Tail = InitQueue();
     //FreeQueue(&Tail);
     return 0;

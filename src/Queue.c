@@ -55,7 +55,7 @@ void FreeQueue(Queue** Container)
     if (*Container == NULL) return; 
     while ((*Container)->Eldest != NULL)
     {
-        (*Container)->Dequeue(&((*Container)->Eldest));
+        DequeueF(&(*Container)->Eldest);
     }   
     free(*Container);
 }

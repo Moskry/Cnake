@@ -20,6 +20,7 @@ void InitSnake(SharedContent* content)
         printf("%s\n",content->Map[i]);
         fflush(stdout);
     }
+    printf("Score: %d",content->Score);
 }
 
 bool SnakeMoveLeft(SharedContent* content, Queue** Tail);
@@ -53,7 +54,8 @@ void DirectionSelection(SharedContent* content, bool* GameOver)
 
 void SnakeMove(SharedContent* content, bool* GameOver, Queue** Tail)
 {
-    DWORD clock;
+    DWORD clock = 500;
+    int TSC = 0;
 
     bool end;
     while(*GameOver != true)
@@ -68,11 +70,16 @@ void SnakeMove(SharedContent* content, bool* GameOver, Queue** Tail)
         WaitForSingleObject(content->mutex, INFINITE);
         *GameOver = end;
         ReleaseMutex(content->mutex);
-
-        if (content->Score <= 15) clock = 500 - 10 * content->Score;
-        else if (content->Score <= 30) clock = 350 - 8 * content->Score;
-        else if (content->Score <= 50) clock = 230 - 6 * content->Score;
-        else clock = 110 - 5 * content->Score;
+        if (TSC != content->Score)
+        {
+            if (content->Score <= 10) clock -= 10;
+            else if (content->Score <= 20) clock -= 9;
+            else if (content->Score <= 30) clock -= 8;
+            else if (content->Score <= 40) clock -= 7;
+            else if (content->Score <= 50) clock -= 6;
+            else clock -= 1;
+            TSC = content->Score;
+        }
         Sleep(clock);
     }
 }
@@ -113,6 +120,8 @@ bool SnakeMoveLeft(SharedContent* content, Queue** Tail)
     return SnakeMoveH(content, newPos, Tail);
 }
 
+void OverwriteS(IntTuple pos, IntTuple endl, char* z);
+
 bool SnakeMoveV(SharedContent* content, IntTuple newPos, Queue** Tail)
 {
     bool IsApple = false;
@@ -127,6 +136,9 @@ bool SnakeMoveV(SharedContent* content, IntTuple newPos, Queue** Tail)
         WaitForSingleObject(content->mutex, INFINITE);
         content->Score++;
         ReleaseMutex(content->mutex);
+        char score[5];
+        sprintf(score, "%d", content->Score);
+        OverwriteS((IntTuple){ 7, content->Height }, (IntTuple){ 7, content->Height }, score);
     }
 
     if ((*Tail)->Eldest) HasTail = true;
@@ -139,9 +151,9 @@ bool SnakeMoveV(SharedContent* content, IntTuple newPos, Queue** Tail)
 
     if (IsApple) RandomNewApple(content, NULL, NULL);
 
-    if (!HasTail) Overwrite(*(content->pos), (IntTuple){content->Width * 2, content->Height}, '.');
-    else Overwrite(*(content->pos), (IntTuple){content->Width * 2, content->Height}, 'O');
-    Overwrite(newPos, (IntTuple){content->Width * 2, content->Height}, '@');
+    if (!HasTail) Overwrite(*(content->pos), (IntTuple){ 7, content->Height}, '.');
+    else Overwrite(*(content->pos), (IntTuple){ 7, content->Height}, 'O');
+    Overwrite(newPos, (IntTuple){ 7, content->Height }, '@');
 
     if (!IsApple) RotateTail(content, Tail); 
 
@@ -166,6 +178,9 @@ bool SnakeMoveH(SharedContent* content, IntTuple newPos, Queue** Tail)
         WaitForSingleObject(content->mutex, INFINITE);
         content->Score++;
         ReleaseMutex(content->mutex);
+        char score[5];
+        sprintf(score, "%d", content->Score);
+        OverwriteS((IntTuple){ 7, content->Height }, (IntTuple){ 7, content->Height }, score);
     }
 
     if ((*Tail)->Eldest) HasTail = true;
@@ -178,9 +193,9 @@ bool SnakeMoveH(SharedContent* content, IntTuple newPos, Queue** Tail)
 
     if (IsApple) RandomNewApple(content, NULL, NULL);
 
-    if (!HasTail) Overwrite(*(content->pos),(IntTuple){content->Width * 2, content->Height}, '.');
-    else Overwrite(*(content->pos),(IntTuple){content->Width * 2, content->Height}, 'O');
-    Overwrite(newPos, (IntTuple){content->Width * 2, content->Height}, '@');
+    if (!HasTail) Overwrite(*(content->pos),(IntTuple){ 7, content->Height }, '.');
+    else Overwrite(*(content->pos),(IntTuple){ 7, content->Height }, 'O');
+    Overwrite(newPos, (IntTuple){ 7, content->Height + 1 }, '@');
     
     if (!IsApple) RotateTail(content, Tail);
 
@@ -194,5 +209,10 @@ bool SnakeMoveH(SharedContent* content, IntTuple newPos, Queue** Tail)
 void Overwrite(IntTuple pos, IntTuple endl, char z)
 {
      printf("\033[%d;%dH%c",pos.y + 1, pos.x + 1, z);
+     printf("\033[%d;%dH",endl.y + 1, endl.x + 1);
+}
+void OverwriteS(IntTuple pos, IntTuple endl, char* z)
+{
+     printf("\033[%d;%dH%s",pos.y + 1, pos.x + 1, z);
      printf("\033[%d;%dH",endl.y + 1, endl.x + 1);
 }

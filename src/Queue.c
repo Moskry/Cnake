@@ -52,7 +52,13 @@ Queue* InitQueue()
 }
 void FreeQueue(Queue** Container)
 {
-    if (*Container == NULL) return; 
+    if (*Container == NULL) return;
+    if ((*Container)->Eldest == (*Container)->Latest)
+    {
+        (*Container)->Latest = NULL; 
+        (*Container)->Eldest->Next = NULL;
+    }
+
     while ((*Container)->Eldest != NULL)
     {
         DequeueF(&(*Container)->Eldest);

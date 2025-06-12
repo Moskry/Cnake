@@ -36,9 +36,10 @@ void EnqueueF(int X, int Y, QueueBase** Latest)
 {
     *Latest = EnqueueBase(X, Y, Latest);
 }
-void DequeueF(QueueBase** Eldest)
+IntTuple DequeueF(QueueBase** Eldest)
 {
-    DequeueBase(Eldest);
+    IntTuple RV = DequeueBase(Eldest);
+    return RV;
 }
 Queue* InitQueue()
 {
@@ -51,10 +52,16 @@ Queue* InitQueue()
 }
 void FreeQueue(Queue** Container)
 {
-    if (*Container == NULL) return; 
+    if (*Container == NULL) return;
+    if ((*Container)->Eldest == (*Container)->Latest)
+    {
+        (*Container)->Latest = NULL; 
+        (*Container)->Eldest->Next = NULL;
+    }
+
     while ((*Container)->Eldest != NULL)
     {
-        (*Container)->Dequeue(&((*Container)->Eldest));
+        DequeueF(&(*Container)->Eldest);
     }   
     free(*Container);
 }

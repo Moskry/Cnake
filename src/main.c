@@ -17,21 +17,23 @@ int main()
 {
     enableAnsiEscCodes();
     IntTuple pos;
-    SharedContent Shared = {20,20,'W',&pos};
+    SharedContent Shared = {20, 20, 'W', &pos, 0};
+    Queue* Tail = InitQueue();
     bool GameOver = false;
     Shared.mutex = CreateMutex(NULL, false, NULL);
 
     if (Shared.mutex == NULL) 
     {
-    printf("Mutex creation failed: %d\n", GetLastError());
-    return 1;
+        printf("Mutex creation failed: %d\n", GetLastError());
+        return 1;
     }
     DataS data = {&Shared,&GameOver};
+    FullData fdata = {&Shared, &GameOver, &Tail};
     InitSnake(&Shared);
     DWORD threadMID;
     DWORD threadSDID;
 
-    HANDLE hMovement = NewThread(&threadMID, MovementThread, &data);
+    HANDLE hMovement = NewThread(&threadMID, MovementThread, &fdata);
     HANDLE hDirection = NewThread(&threadSDID, DirectionThread, &data);
 
      WaitForSingleObject(hMovement, INFINITE);
@@ -40,7 +42,9 @@ int main()
     CloseHandle(hMovement);
     CloseHandle(hDirection);
     FreeMap(&Shared);
-    //Queue* Tail = InitQueue();
-    //FreeQueue(&Tail);
+    FreeQueue(&Tail);
+
+    printf("Game over!");
+
     return 0;
 }

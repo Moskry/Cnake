@@ -23,6 +23,7 @@ void InitiateApples(SharedContent* shared)
 
 void RandomNewApple(SharedContent* shared, int* h, int* w)
 {
+    if ((shared->Width * shared->Height - sqrt(shared->Height * shared->Width)/2  - 1) <= shared->Score) return;
     int a,b;
     if (h == NULL || w == NULL)
     {

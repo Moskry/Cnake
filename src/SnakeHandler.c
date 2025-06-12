@@ -53,7 +53,8 @@ void DirectionSelection(SharedContent* content, bool* GameOver)
 
 void SnakeMove(SharedContent* content, bool* GameOver, Queue** Tail)
 {
-    DWORD clock = 500;
+    DWORD clock;
+
     bool end;
     while(*GameOver != true)
     {
@@ -68,8 +69,11 @@ void SnakeMove(SharedContent* content, bool* GameOver, Queue** Tail)
         *GameOver = end;
         ReleaseMutex(content->mutex);
 
+        if (content->Score <= 15) clock = 500 - 10 * content->Score;
+        else if (content->Score <= 30) clock = 350 - 8 * content->Score;
+        else if (content->Score <= 50) clock = 230 - 6 * content->Score;
+        else clock = 110 - 5 * content->Score;
         Sleep(clock);
-        if (clock > 50) clock -= 5;
     }
 }
 
@@ -120,6 +124,9 @@ bool SnakeMoveV(SharedContent* content, IntTuple newPos, Queue** Tail)
     {
         IsApple = true;
         AddTailSegment(content, Tail);
+        WaitForSingleObject(content->mutex, INFINITE);
+        content->Score++;
+        ReleaseMutex(content->mutex);
     }
 
     if ((*Tail)->Eldest) HasTail = true;
@@ -156,6 +163,9 @@ bool SnakeMoveH(SharedContent* content, IntTuple newPos, Queue** Tail)
     {
         IsApple = true;
         AddTailSegment(content, Tail);
+        WaitForSingleObject(content->mutex, INFINITE);
+        content->Score++;
+        ReleaseMutex(content->mutex);
     }
 
     if ((*Tail)->Eldest) HasTail = true;

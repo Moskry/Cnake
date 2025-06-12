@@ -15,6 +15,7 @@ typedef struct SharedContent
     int Height;
     char direction;
     IntTuple* pos;
+    int Score;
     char** Map;
     HANDLE mutex;
 } SharedContent;

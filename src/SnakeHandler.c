@@ -1,8 +1,4 @@
-#include <stdio.h>
-#include <conio.h>
-#include <ctype.h>
 #include "Snake.h"
-#include "Apples.h"
 
 void InitSnake(SharedContent* content)
 {
@@ -206,11 +202,6 @@ bool SnakeMoveH(SharedContent* content, IntTuple newPos, Queue** Tail)
     return false;
 }
 
-void Overwrite(IntTuple pos, IntTuple endl, char z)
-{
-     printf("\033[%d;%dH%c",pos.y + 1, pos.x + 1, z);
-     printf("\033[%d;%dH",endl.y + 1, endl.x + 1);
-}
 void OverwriteS(IntTuple pos, IntTuple endl, char* z)
 {
      printf("\033[%d;%dH%s",pos.y + 1, pos.x + 1, z);

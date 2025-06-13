@@ -1,7 +1,6 @@
 #include <math.h>
 #include <time.h>
 #include "Apples.h"
-#include "Shared.h"
 
 void InitiateApples(SharedContent* shared)
 {

@@ -1,5 +1,6 @@
 #include <windows.h>
 #include "Threads.h"
+#include "Snake.h"
 
 DWORD WINAPI MovementThread(LPVOID pData)
 {

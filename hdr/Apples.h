@@ -1,9 +1,6 @@
 #pragma once
-
-#include "Shared.h"
-#include "Snake.h"
-
-typedef struct SharedContent SharedContent;
+#include "Structs/SharedContent.h"
+#include "Overwrite.h"
 
 void InitiateApples(SharedContent* shared);
 void RandomNewApple(SharedContent* shared, int* h, int* w);

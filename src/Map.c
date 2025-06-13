@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "Shared.h"
+#include "Map.h"
 
 void InitMap(SharedContent* Content)
 {

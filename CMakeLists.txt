@@ -1,7 +1,13 @@
 cmake_minimum_required(VERSION 3.10)
 project(CNake)
 
-include_directories(hdr)
-file(GLOB SOURCE_FILES "src/*.c")
+set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
+set(HDR_DIR "${CMAKE_SOURCE_DIR}/hdr")
 
-add_executable(CNake ${SOURCE_FILES})
+file(GLOB_RECURSE SOURCES "${SRC_DIR}/*.c")
+file(GLOB_RECURSE HEADERS "${HDR_DIR}/*.h")
+message(STATUS "Headers found: ${HEADERS}")
+
+add_executable(CNake ${SOURCES} ${HEADERS})
+
+target_include_directories(CNake PRIVATE ${HDR_DIR})

@@ -1,5 +1,4 @@
-#include <stdlib.h>
-#include "Shared.h"
+#include "Queue.h"
 
 QueueBase* EnqueueBase(int X, int Y, QueueBase** current)
 {

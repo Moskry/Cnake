@@ -1,9 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <windows.h>
-#include "Shared.h"
 #include "Snake.h"
 #include "Threads.h"
+#include "Queue.h"
 
 void enableAnsiEscCodes()
 {
@@ -27,6 +24,7 @@ int main()
         printf("Mutex creation failed: %d\n", GetLastError());
         return 1;
     }
+    
     DataS data = {&Shared,&GameOver};
     FullData fdata = {&Shared, &GameOver, &Tail};
     InitSnake(&Shared);

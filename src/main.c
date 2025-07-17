@@ -29,8 +29,8 @@ int main(int argc, char **argv) {
   int x = 300;
   int y = 200;
   glutInitWindowPosition(x, y);
-  int win = glutCreateWindow("Orthogonal Projection Example");
-  remove_maximize_button(FindWindow(NULL, "Orthogonal Projection Example"));
+  int win = glutCreateWindow("CNake Game");
+  remove_maximize_button(FindWindow(NULL, "CNake Game"));
 
   glDisable(GL_DEPTH_TEST);
   glutDisplayFunc(display);

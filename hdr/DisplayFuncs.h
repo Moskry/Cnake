@@ -15,3 +15,4 @@ void reshape(int w, int h);
 void draw_triangle(void);
 void draw_square(int i, int j);
 void draw_map(void);
+void draw_text(const char* text, float x, float y);

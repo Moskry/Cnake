@@ -7,8 +7,8 @@ typedef struct SharedContent
     int Width;
     int Height;
     char direction;
-    IntTuple* pos;
+    IntTuple *pos;
     int Score;
-    char** Map;
+    char **Map;
     HANDLE mutex;
 } SharedContent;

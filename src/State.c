@@ -11,4 +11,4 @@ bool init_map = false;
 // from legacy main logic
 IntTuple pos;
 SharedContent sContent = {20, 20, 'W', &pos, 0};
-Queue* sTail;
+Queue *sTail;

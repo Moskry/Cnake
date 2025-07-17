@@ -1,9 +1,8 @@
 #pragma once
+#include "Structs/Queue.h"
+#include "Structs/SharedContent.h"
 #include <stdbool.h>
 #include <windows.h>
-#include "Structs/SharedContent.h"
-#include "Structs/Queue.h"
-
 
 extern int width;
 extern int height;
@@ -20,4 +19,4 @@ extern bool init_map;
 // from main business logic
 extern IntTuple pos;
 extern SharedContent sContent;
-extern Queue* sTail; 
+extern Queue *sTail;

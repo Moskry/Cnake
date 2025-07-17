@@ -1,29 +1,24 @@
-#include <stdlib.h>
 #include "Map.h"
+#include <stdlib.h>
 
-void InitMap(SharedContent* Content)
-{
-    Content->Map = (char**)malloc(Content->Height * sizeof(char*));
-    if (Content->Map)
-    {
-        for(int i = 0; i < Content->Height; i++)
-        {
-            Content->Map[i] = (char*)malloc(Content->Width * 2 * sizeof(char));
-            for(int j = 0; j < Content->Width; j++)
-            {
-                Content->Map[i][j * 2] = '.';
-                Content->Map[i][j * 2 + 1] = ' ';
-            }
-            Content->Map[i][Content->Width * 2 - 1] = 0;
-        }
+
+void InitMap(SharedContent *Content) {
+  Content->Map = (char **)malloc(Content->Height * sizeof(char *));
+  if (Content->Map) {
+    for (int i = 0; i < Content->Height; i++) {
+      Content->Map[i] = (char *)malloc(Content->Width * 2 * sizeof(char));
+      for (int j = 0; j < Content->Width; j++) {
+        Content->Map[i][j * 2] = '.';
+        Content->Map[i][j * 2 + 1] = ' ';
+      }
+      Content->Map[i][Content->Width * 2 - 1] = 0;
     }
-    init_map = true;
+  }
+  init_map = true;
 }
-void FreeMap(SharedContent* Content)
-{
-    for(int i = 0; i < Content->Height; i++)
-    {
-        free(Content->Map[i]);
-    }
-    free(Content->Map);
+void FreeMap(SharedContent *Content) {
+  for (int i = 0; i < Content->Height; i++) {
+    free(Content->Map[i]);
+  }
+  free(Content->Map);
 }

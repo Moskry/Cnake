@@ -17,6 +17,7 @@ void InitMap(SharedContent* Content)
             Content->Map[i][Content->Width * 2 - 1] = 0;
         }
     }
+    init_map = true;
 }
 void FreeMap(SharedContent* Content)
 {

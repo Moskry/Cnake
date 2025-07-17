@@ -7,6 +7,11 @@
 
 void remove_maximize_button(HWND handle);
 
+void idle() {
+    glutPostRedisplay();
+    Sleep(16);
+}
+
 void remove_maximize_button(HWND handle)
 {
     LONG style = GetWindowLong(handle, GWL_STYLE);
@@ -30,7 +35,7 @@ int main(int argc, char** argv)
     
     glDisable(GL_DEPTH_TEST);
     glutDisplayFunc(display);
-    glutIdleFunc(display);
+    glutIdleFunc(idle);
     glutReshapeFunc(reshape);
     glutMouseFunc(start_button_click);
     glutSpecialFunc(arrow_handle);
@@ -70,5 +75,5 @@ int main_biz_model()
     CloseHandle(hDirection);
     FreeMap(&sContent);
     FreeQueue(&sTail);
-    return 1;
+    exit(0);
 }

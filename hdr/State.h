@@ -15,6 +15,7 @@ extern bool start_flag;
 extern HANDLE game_handle;
 extern DWORD main_id;
 extern bool button_blocker;
+extern bool init_map;
 
 // from main business logic
 extern IntTuple pos;

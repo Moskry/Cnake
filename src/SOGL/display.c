@@ -27,16 +27,17 @@ void display(void)
         game_handle = NewThread(&main_id, MainThread, NULL);
     }
 
-    if (start_flag == true){
-        draw_square();
-    }
+    //if (start_flag == true){
+    //    glColor4f(0.0,0.8,0.0,1.0);
+    //    draw_square();
+    //}
+    
+    draw_map();
     
     orthogonalEnd();
 
     glutSwapBuffers();
-}
-
-void idle() {
+    //fprintf(stdout,"%d\n%d",sContent.pos->x,sContent.pos->y);
+    //fflush(stdout);
     glutPostRedisplay();
-    Sleep(16);
 }

@@ -9,12 +9,12 @@ void InitSnake(SharedContent* content)
     content->Map[content->pos->y][content->pos->x] = '@';
     
     InitiateApples(content);
-    //for(int i = 0; i < content->Height; i++)
-    //{
-        //fprintf(stdout, "%s\n",content->Map[i]);
-        //fflush(stdout);
-    //}
-    //fprintf(stdout,"Score: %d",content->Score);
+    for(int i = 0; i < content->Height; i++)
+    {
+        fprintf(stdout, "%s\n",content->Map[i]);
+        fflush(stdout);
+    }
+    fprintf(stdout,"Score: %d",content->Score);
 }
 
 bool SnakeMoveLeft(SharedContent* content, Queue** Tail);
@@ -25,7 +25,7 @@ bool SnakeMoveUp(SharedContent* content, Queue** Tail);
 bool SnakeMoveV(SharedContent* content, IntTuple newPos, Queue** Tail);
 bool SnakeMoveH(SharedContent* content, IntTuple newPos, Queue** Tail);
 
-char direction;
+char direction = 'W';
 void arrow_handle(int key, int x, int y)
 {
     switch (key)
@@ -42,7 +42,7 @@ void DirectionSelection(SharedContent* content, bool* GameOver)
     while(*GameOver != true)
     {
         WaitForSingleObject(content->mutex, INFINITE);
-        if (content->direction == 'W')content->direction = direction;
+        content->direction = direction;
         ReleaseMutex(content->mutex);
     }
 }

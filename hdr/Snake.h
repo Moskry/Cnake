@@ -9,6 +9,7 @@
 #include "Overwrite.h"
 #include "Queue.h"
 #include "Graphics.h"
+#include "State.h"
 
 extern bool GameOver;
 

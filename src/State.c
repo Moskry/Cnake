@@ -6,6 +6,7 @@ bool start_flag = false;
 HANDLE game_handle;
 DWORD main_id;
 bool button_blocker = false;
+bool init_map = false;
 
 // from legacy main logic
 IntTuple pos;

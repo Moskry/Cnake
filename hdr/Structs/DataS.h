@@ -5,6 +5,6 @@
 
 typedef struct DataS
 {
-    SharedContent* content;
-    bool* GameOver;
+    SharedContent *content;
+    bool *GameOver;
 } DataS;

@@ -1,48 +1,77 @@
+#include "Queue.h"
 #include "Snake.h"
 #include "Threads.h"
-#include "Queue.h"
 
-void enableAnsiEscCodes()
-{
-    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-    DWORD dwMode = 0;
-    GetConsoleMode(hOut, &dwMode);
-    SetConsoleMode(hOut, dwMode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+
+#include "DisplayFuncs.h"
+#include "buttons.h"
+
+void remove_maximize_button(HWND handle);
+
+void idle() {
+  glutPostRedisplay();
+  Sleep(16);
 }
 
-int main()
-{
-    enableAnsiEscCodes();
-    IntTuple pos;
-    SharedContent Shared = {20, 20, 'W', &pos, 0};
-    Queue* Tail = InitQueue();
-    bool GameOver = false;
-    Shared.mutex = CreateMutex(NULL, false, NULL);
+void remove_maximize_button(HWND handle) {
+  LONG style = GetWindowLong(handle, GWL_STYLE);
+  style &= ~WS_MAXIMIZEBOX;
+  style &= ~WS_THICKFRAME;
+  SetWindowLong(handle, GWL_STYLE, style);
+  SetWindowPos(handle, NULL, 0, 0, 0, 0,
+               SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
+}
 
-    if (Shared.mutex == NULL) 
-    {
-        printf("Mutex creation failed: %d\n", GetLastError());
-        return 1;
-    }
-    
-    DataS data = {&Shared,&GameOver};
-    FullData fdata = {&Shared, &GameOver, &Tail};
-    InitSnake(&Shared);
-    DWORD threadMID;
-    DWORD threadSDID;
+int main(int argc, char **argv) {
+  glutInit(&argc, argv);
+  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+  glutInitWindowSize(width, height);
+  int x = 300;
+  int y = 200;
+  glutInitWindowPosition(x, y);
+  int win = glutCreateWindow("CNake Game");
+  remove_maximize_button(FindWindow(NULL, "CNake Game"));
 
-    HANDLE hMovement = NewThread(&threadMID, MovementThread, &fdata);
-    HANDLE hDirection = NewThread(&threadSDID, DirectionThread, &data);
+  glDisable(GL_DEPTH_TEST);
+  glutDisplayFunc(display);
+  glutIdleFunc(idle);
+  glutReshapeFunc(reshape);
+  glutMouseFunc(start_button_click);
+  glutSpecialFunc(arrow_handle);
 
-     WaitForSingleObject(hMovement, INFINITE);
-     WaitForSingleObject(hDirection, INFINITE);
+  glutMainLoop();
 
-    CloseHandle(hMovement);
-    CloseHandle(hDirection);
-    FreeMap(&Shared);
-    FreeQueue(&Tail);
+  if (game_handle)
+    CloseHandle(game_handle);
+  return 1;
+}
 
-    printf("Game over!");
+int main_biz_model() {
+  DWORD threadMID;
+  DWORD threadSDID;
+  sTail = InitQueue();
+  bool GameOver = false;
+  sContent.mutex = CreateMutex(NULL, false, NULL);
 
-    return 0;
+  if (sContent.mutex == NULL) {
+    fprintf(stdout, "Mutex creation failed: %d\n", GetLastError());
+    return 1;
+  }
+
+  DataS data = {&sContent, &GameOver};
+  FullData fdata = {&sContent, &GameOver, &sTail};
+  InitSnake(&sContent);
+
+  HANDLE hMovement = NewThread(&threadMID, MovementThread, &fdata);
+  HANDLE hDirection = NewThread(&threadSDID, DirectionThread, &data);
+
+  WaitForSingleObject(hMovement, INFINITE);
+  WaitForSingleObject(hDirection, INFINITE);
+
+  fprintf(stdout, "Game over!");
+  CloseHandle(hMovement);
+  CloseHandle(hDirection);
+  FreeMap(&sContent);
+  FreeQueue(&sTail);
+  exit(0);
 }

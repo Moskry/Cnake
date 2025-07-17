@@ -4,8 +4,8 @@
 
 typedef struct Queue
 {
-    QueueBase* Latest;
-    QueueBase* Eldest;
-    void (*Enqueue)(int, int, QueueBase**);
-    IntTuple (*Dequeue)(QueueBase**);
+    QueueBase *Latest;
+    QueueBase *Eldest;
+    void (*Enqueue)(int, int, QueueBase **);
+    IntTuple (*Dequeue)(QueueBase **);
 } Queue;

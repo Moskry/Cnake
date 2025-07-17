@@ -9,14 +9,12 @@ void InitSnake(SharedContent* content)
     content->Map[content->pos->y][content->pos->x] = '@';
     
     InitiateApples(content);
-
-    printf("\033[2J\033[H");
-    for(int i = 0; i < content->Height; i++)
-    {
-        printf("%s\n",content->Map[i]);
-        fflush(stdout);
-    }
-    printf("Score: %d",content->Score);
+    //for(int i = 0; i < content->Height; i++)
+    //{
+        //fprintf(stdout, "%s\n",content->Map[i]);
+        //fflush(stdout);
+    //}
+    //fprintf(stdout,"Score: %d",content->Score);
 }
 
 bool SnakeMoveLeft(SharedContent* content, Queue** Tail);
@@ -135,7 +133,7 @@ bool SnakeMoveV(SharedContent* content, IntTuple newPos, Queue** Tail)
         ReleaseMutex(content->mutex);
         char score[5];
         sprintf(score, "%d", content->Score);
-        OverwriteS((IntTuple){ 7, content->Height }, (IntTuple){ 7, content->Height }, score);
+        //OverwriteS((IntTuple){ 7, content->Height }, (IntTuple){ 7, content->Height }, score);
     }
 
     if ((*Tail)->Eldest) HasTail = true;
@@ -177,7 +175,7 @@ bool SnakeMoveH(SharedContent* content, IntTuple newPos, Queue** Tail)
         ReleaseMutex(content->mutex);
         char score[5];
         sprintf(score, "%d", content->Score);
-        OverwriteS((IntTuple){ 7, content->Height }, (IntTuple){ 7, content->Height }, score);
+        //OverwriteS((IntTuple){ 7, content->Height }, (IntTuple){ 7, content->Height }, score);
     }
 
     if ((*Tail)->Eldest) HasTail = true;

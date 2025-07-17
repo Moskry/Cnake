@@ -28,6 +28,7 @@ int main(int argc, char** argv)
     int win = glutCreateWindow("Orthogonal Projection Example");
     remove_maximize_button(FindWindow(NULL, "Orthogonal Projection Example"));
     
+    glDisable(GL_DEPTH_TEST);
     glutDisplayFunc(display);
     glutIdleFunc(display);
     glutReshapeFunc(reshape);
@@ -42,23 +43,21 @@ int main(int argc, char** argv)
 
 int main_biz_model()
 {
-    IntTuple pos;
     DWORD threadMID;
     DWORD threadSDID;
-    SharedContent Shared = {20, 20, 'W', &pos, 0};
-    Queue* Tail = InitQueue();
+    sTail = InitQueue();
     bool GameOver = false;
-    Shared.mutex = CreateMutex(NULL, false, NULL);
+    sContent.mutex = CreateMutex(NULL, false, NULL);
 
-    if (Shared.mutex == NULL) 
+    if (sContent.mutex == NULL) 
     {
         fprintf(stdout, "Mutex creation failed: %d\n", GetLastError());
         return 1;
     }
     
-    DataS data = {&Shared,&GameOver};
-    FullData fdata = {&Shared, &GameOver, &Tail};
-    InitSnake(&Shared);
+    DataS data = {&sContent,&GameOver};
+    FullData fdata = {&sContent, &GameOver, &sTail};
+    InitSnake(&sContent);
     
     HANDLE hMovement = NewThread(&threadMID, MovementThread, &fdata);
     HANDLE hDirection = NewThread(&threadSDID, DirectionThread, &data);
@@ -69,7 +68,7 @@ int main_biz_model()
     fprintf(stdout, "Game over!");
     CloseHandle(hMovement);
     CloseHandle(hDirection);
-    FreeMap(&Shared);
-    FreeQueue(&Tail);
+    FreeMap(&sContent);
+    FreeQueue(&sTail);
     return 1;
 }

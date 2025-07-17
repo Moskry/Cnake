@@ -1,6 +1,9 @@
 #pragma once
 #include <stdbool.h>
 #include <windows.h>
+#include "Structs/SharedContent.h"
+#include "Structs/Queue.h"
+
 
 extern int width;
 extern int height;
@@ -12,3 +15,8 @@ extern bool start_flag;
 extern HANDLE game_handle;
 extern DWORD main_id;
 extern bool button_blocker;
+
+// from main business logic
+extern IntTuple pos;
+extern SharedContent sContent;
+extern Queue* sTail; 

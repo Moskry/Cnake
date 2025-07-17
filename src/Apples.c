@@ -36,6 +36,6 @@ void RandomNewApple(SharedContent* shared, int* h, int* w)
 
     WaitForSingleObject(shared->mutex, INFINITE);
     shared->Map[*h][*w * 2] = '+';
-    Overwrite((IntTuple){*w * 2, *h}, (IntTuple){shared->Width, shared->Height}, '+');
+    //Overwrite((IntTuple){*w * 2, *h}, (IntTuple){shared->Width, shared->Height}, '+');
     ReleaseMutex(shared->mutex);
 }

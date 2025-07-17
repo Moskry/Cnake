@@ -12,4 +12,4 @@ void orthogonalStart(void);
 void orthogonalEnd(void);
 void reshape(int w, int h);
 void draw_triangle(void);
-void draw_square();
+void draw_square(void);

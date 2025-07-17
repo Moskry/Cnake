@@ -23,13 +23,20 @@ void display(void)
 
     start_button();
     if (start_flag == true && button_blocker == false) {
-        start_flag = button_blocker = false;
+        button_blocker = true;
         game_handle = NewThread(&main_id, MainThread, NULL);
     }
 
-    //draw_square();
+    if (start_flag == true){
+        draw_square();
+    }
     
     orthogonalEnd();
 
     glutSwapBuffers();
+}
+
+void idle() {
+    glutPostRedisplay();
+    Sleep(16);
 }

@@ -1,6 +1,6 @@
 #include "DisplayFuncs.h"
 
-void draw_triangle(void)
+void draw_triangle(void) // Deprecated
 {
     glColor4f(0.0,0.0,0.8,1.0);
     glBegin(GL_TRIANGLES);

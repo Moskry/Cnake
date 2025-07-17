@@ -27,23 +27,24 @@ bool SnakeMoveUp(SharedContent* content, Queue** Tail);
 bool SnakeMoveV(SharedContent* content, IntTuple newPos, Queue** Tail);
 bool SnakeMoveH(SharedContent* content, IntTuple newPos, Queue** Tail);
 
+char direction;
+void arrow_handle(int key, int x, int y)
+{
+    switch (key)
+    {
+        case GLUT_KEY_UP: direction = 'w'; break;
+        case GLUT_KEY_DOWN: direction = 's'; break;
+        case GLUT_KEY_LEFT: direction = 'a'; break;
+        case GLUT_KEY_RIGHT: direction = 'd'; break;
+    }
+}
+
 void DirectionSelection(SharedContent* content, bool* GameOver)
 {
-    char bufferKey;
     while(*GameOver != true)
     {
-
-        do
-        {
-            bufferKey = _getch();
-            bufferKey = toupper(bufferKey);
-        } while(bufferKey != 'A' &&
-            bufferKey != 'W' &&
-            bufferKey != 'S' &&
-            bufferKey != 'D');
-
         WaitForSingleObject(content->mutex, INFINITE);
-        content->direction = bufferKey;
+        content->direction = direction;
         ReleaseMutex(content->mutex);
     }
 }

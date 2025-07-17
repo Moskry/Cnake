@@ -13,7 +13,6 @@ DWORD main_id;
 
 void remove_maximize_button(HWND handle);
 
-
 void remove_maximize_button(HWND handle)
 {
     LONG style = GetWindowLong(handle, GWL_STYLE);
@@ -39,10 +38,11 @@ int main(int argc, char** argv)
     glutIdleFunc(display);
     glutReshapeFunc(reshape);
     glutMouseFunc(start_button_click);
+    glutSpecialFunc(arrow_handle);
 
     glutMainLoop();
-    
-    CloseHandle(game_handle);
+
+    if (game_handle) CloseHandle(game_handle);
     return 1;
 }
 

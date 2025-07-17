@@ -8,9 +8,11 @@
 #include "Tail.h"
 #include "Overwrite.h"
 #include "Queue.h"
+#include "Graphics.h"
 
 extern bool GameOver;
 
 void InitSnake(SharedContent* content);
 void WINAPI SnakeMove(SharedContent* content, bool* GameOver, Queue** Tail);
 void WINAPI DirectionSelection(SharedContent* content, bool* GameOver);
+void arrow_handle(int key, int x, int y);

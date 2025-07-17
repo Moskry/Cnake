@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Graphics.h"
-#include "Structs/Square.h"
+#include "Structs/SharedContent.h"
 
 extern int width;
 extern int height;

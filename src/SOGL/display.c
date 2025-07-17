@@ -28,6 +28,8 @@ void display(void)
         start_flag = button_blocker = false;
         game_handle = NewThread(&main_id, MainThread, NULL);
     }
+
+    
     orthogonalEnd();
 
     glutSwapBuffers();

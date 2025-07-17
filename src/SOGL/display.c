@@ -1,5 +1,11 @@
+#include "Snake.h"
+#include "Threads.h"
+#include "Queue.h"
+
 #include "DisplayFuncs.h"
 #include "buttons.h"
+
+bool button_blocker = false;
 
 void display(void)
 {
@@ -18,7 +24,10 @@ void display(void)
     glEnd();
 
     start_button();
-    if (triangle_flag == true) draw_triangle();
+    if (start_flag == true && button_blocker == false) {
+        start_flag = button_blocker = false;
+        game_handle = NewThread(&main_id, MainThread, NULL);
+    }
     orthogonalEnd();
 
     glutSwapBuffers();

@@ -24,7 +24,7 @@ void start_button_click(int button, int state, int x, int y)
         if (x >= start_button_x && x <= start_button_x + start_button_width &&
             y >= start_button_y && y <= start_button_y + start_button_height){
                 //glutDisplayFunc(draw_triangle);
-                triangle_flag = true;
+                start_flag = true;
             }
     }
 }

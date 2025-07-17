@@ -2,6 +2,11 @@
 #include "Threads.h"
 #include "Snake.h"
 
+DWORD WINAPI MainThread(LPVOID pData)
+{
+    main_biz_model();
+}
+
 DWORD WINAPI MovementThread(LPVOID pData)
 {
     FullData* data = (FullData*)pData;

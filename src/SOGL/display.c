@@ -2,7 +2,6 @@
 #include "Snake.h"
 #include "Threads.h"
 
-
 #include "DisplayFuncs.h"
 #include "buttons.h"
 
@@ -22,8 +21,8 @@ void display(void) {
   glEnd();
 
   start_button();
-  glColor4f(1.0,1.0,1.0,1.0);
-  draw_text("Start",225, 575);
+  glColor4f(1.0, 1.0, 1.0, 1.0);
+  draw_text("Start", 225, 575);
   if (start_flag == true && button_blocker == false) {
     button_blocker = true;
     game_handle = NewThread(&main_id, MainThread, NULL);
@@ -36,13 +35,12 @@ void display(void) {
 
   draw_map();
 
-    if (start_flag == true)
-    {
-        char buffer[50];
-        sprintf(buffer, "Score: %d",sContent.Score);
-        glColor4f(1.0,1.0,1.0,1.0);
-        draw_text(buffer, 400, 540);
-    }
+  if (start_flag == true) {
+    char buffer[50];
+    sprintf(buffer, "Score: %d", sContent.Score);
+    glColor4f(1.0, 1.0, 1.0, 1.0);
+    draw_text(buffer, 400, 540);
+  }
 
   orthogonalEnd();
 

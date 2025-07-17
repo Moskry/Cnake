@@ -5,8 +5,6 @@
 #include "DisplayFuncs.h"
 #include "buttons.h"
 
-bool button_blocker = false;
-
 void display(void)
 {
     glClearColor(0.5,0.5,0.8,1.0);
@@ -29,6 +27,7 @@ void display(void)
         game_handle = NewThread(&main_id, MainThread, NULL);
     }
 
+    //draw_square();
     
     orthogonalEnd();
 

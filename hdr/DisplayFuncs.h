@@ -2,9 +2,7 @@
 
 #include "Graphics.h"
 #include "Structs/SharedContent.h"
-
-extern int width;
-extern int height;
+#include "State.h"
 
 #define TOP_LEFT 20   
 #define BOX_STEP 25

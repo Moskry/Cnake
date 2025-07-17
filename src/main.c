@@ -5,12 +5,6 @@
 #include "DisplayFuncs.h"
 #include "buttons.h"
 
-int width = 540;
-int height = 700;
-bool start_flag = false;
-HANDLE game_handle;
-DWORD main_id;
-
 void remove_maximize_button(HWND handle);
 
 void remove_maximize_button(HWND handle)

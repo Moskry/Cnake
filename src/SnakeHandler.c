@@ -32,10 +32,10 @@ void arrow_handle(int key, int x, int y)
 {
     switch (key)
     {
-        case GLUT_KEY_UP: direction = 'w'; break;
-        case GLUT_KEY_DOWN: direction = 's'; break;
-        case GLUT_KEY_LEFT: direction = 'a'; break;
-        case GLUT_KEY_RIGHT: direction = 'd'; break;
+        case GLUT_KEY_UP: direction = 'W'; break;
+        case GLUT_KEY_DOWN: direction = 'S'; break;
+        case GLUT_KEY_LEFT: direction = 'A'; break;
+        case GLUT_KEY_RIGHT: direction = 'D'; break;
     }
 }
 
@@ -44,7 +44,7 @@ void DirectionSelection(SharedContent* content, bool* GameOver)
     while(*GameOver != true)
     {
         WaitForSingleObject(content->mutex, INFINITE);
-        content->direction = direction;
+        if (content->direction == 'W')content->direction = direction;
         ReleaseMutex(content->mutex);
     }
 }
@@ -148,9 +148,9 @@ bool SnakeMoveV(SharedContent* content, IntTuple newPos, Queue** Tail)
 
     if (IsApple) RandomNewApple(content, NULL, NULL);
 
-    if (!HasTail) Overwrite(*(content->pos), (IntTuple){ 7, content->Height}, '.');
-    else Overwrite(*(content->pos), (IntTuple){ 7, content->Height}, 'O');
-    Overwrite(newPos, (IntTuple){ 7, content->Height }, '@');
+    //if (!HasTail) Overwrite(*(content->pos), (IntTuple){ 7, content->Height}, '.');
+    //else Overwrite(*(content->pos), (IntTuple){ 7, content->Height}, 'O');
+    //Overwrite(newPos, (IntTuple){ 7, content->Height }, '@');
 
     if (!IsApple) RotateTail(content, Tail); 
 
@@ -190,9 +190,9 @@ bool SnakeMoveH(SharedContent* content, IntTuple newPos, Queue** Tail)
 
     if (IsApple) RandomNewApple(content, NULL, NULL);
 
-    if (!HasTail) Overwrite(*(content->pos),(IntTuple){ 7, content->Height }, '.');
-    else Overwrite(*(content->pos),(IntTuple){ 7, content->Height }, 'O');
-    Overwrite(newPos, (IntTuple){ 7, content->Height + 1 }, '@');
+    //if (!HasTail) Overwrite(*(content->pos),(IntTuple){ 7, content->Height }, '.');
+    //else Overwrite(*(content->pos),(IntTuple){ 7, content->Height }, 'O');
+    //Overwrite(newPos, (IntTuple){ 7, content->Height + 1 }, '@');
     
     if (!IsApple) RotateTail(content, Tail);
 
@@ -203,8 +203,8 @@ bool SnakeMoveH(SharedContent* content, IntTuple newPos, Queue** Tail)
     return false;
 }
 
-void OverwriteS(IntTuple pos, IntTuple endl, char* z)
-{
-     printf("\033[%d;%dH%s",pos.y + 1, pos.x + 1, z);
-     printf("\033[%d;%dH",endl.y + 1, endl.x + 1);
-}
+//void OverwriteS(IntTuple pos, IntTuple endl, char* z)
+//{
+//     printf("\033[%d;%dH%s",pos.y + 1, pos.x + 1, z);
+//     printf("\033[%d;%dH",endl.y + 1, endl.x + 1);
+//}
